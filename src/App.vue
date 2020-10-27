@@ -1,17 +1,35 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <textarea v-model="text" cols="30" rows="5" />
+    <br />
+    <button @click.prevent="getList">Converter</button>
+    
+    <pre>{{result}}</pre>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
 
 export default {
   name: "App",
-  components: {
-    HelloWorld
+  data() {
+    return {
+      text: '',
+      result: ''
+    }
+  },
+  methods: {
+    getList() {
+      if(this.text) {
+        this.result = this.text.match(/\d+.\d+,\d+.\d+/g).map((i,k) => {  
+          if(k % 3 === 2) {
+              return `${i}\n------------------\n`     
+          } else {
+              return `${i}\n` 
+          }
+        }).join('')
+      }
+    }
   }
 };
 </script>
