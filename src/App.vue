@@ -3,7 +3,7 @@
     <textarea v-model="text" cols="30" rows="5" />
     <br />
     <button @click.prevent="getList">Converter</button>
-    
+    <h4>Resultado</h4>
     <pre>{{result}}</pre>
   </div>
 </template>
