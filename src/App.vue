@@ -21,7 +21,7 @@ export default {
   methods: {
     getList() {
       if(this.text) {
-        this.result = this.text.match(/\d+.\d+,\d+.\d+/g).map((i,k) => {  
+        this.result = this.text.match(/-?\d+.\d+,-?\d+.\d+/g).map((i,k) => {  
           if(k % 3 === 2) {
               return `${i}\n------------------\n`     
           } else {
