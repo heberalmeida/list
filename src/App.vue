@@ -6,7 +6,7 @@
     <h4>Resultado</h4>
     <ul>
       <li v-for="(r, k) in result" :key="k">
-        <span :style="r.copy ? 'text-decoration: line-through;': ''">{{k}}-{{ r.coord }}</span>
+        <span :style="r.copy ? 'text-decoration: line-through;': ''">{{ r.coord }}</span>
         <button @click="getCopy(r)">Copy</button>
         <hr v-if="k % 3 === 2" />  
       </li>
