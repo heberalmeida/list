@@ -1,36 +1,60 @@
 <template>
   <div id="app">
-    <h3>Só Coordenadas</h3>
-    <h3>Solo coordenadas</h3>
-    <h3>OnlyCoordinate</h3>
+    <div id="slide-externo">
+      <div id="slide-interno">
+        <h3>Só Coordenadas</h3>
+        <h3>Solo coordenadas</h3>
+        <h3>Only Coordinate</h3>
+      </div>
+    </div>
     <textarea v-model="text" cols="30" rows="5" />
     <br />
-    <button @click.prevent="getList">Converter</button>
-    <button @click.prevent="getEmpty">Limpar</button>
+    <vue-flip active-click width="200px" height="50px" class="btn-container">
+      <template v-slot:front>
+        <div class="btn" @click="getList">Converter</div>
+      </template>
+      <template v-slot:back>
+        <div class="btn" @click="getEmpty">Limpar</div>
+      </template>
+    </vue-flip>
+    <!--  <button @click.prevent="getList">Converter</button>
+    <button @click.prevent="getEmpty">Limpar</button> -->
     <h4 v-if="result.lenght">Result</h4>
     <ul>
       <li v-for="(r, k) in result" :key="k">
         <table>
           <tr>
-            <td>
+            <td class="coord">
               <span
                 class="coord"
                 :style="r.copy ? 'text-decoration: line-through;' : ''"
                 >{{ r.coord }}</span
               >
             </td>
-            <td>
+            <td class="tempo">
               <span v-if="!r.copy">{{ r.tempo }}</span>
-              <small v-else>
+              <span class="text-tempo" v-else>
                 <countdown :time="r.time * 1000" :transform="transform">
                   <template slot-scope="props">
                     {{ props.minutes }}:{{ props.seconds }}</template
                   >
                 </countdown>
-              </small>
+              </span>
             </td>
-            <td>
-              <button @click="getCopy(r)">Copy</button>
+            <td class="copy">
+              <vue-flip
+                active-click
+                width="100px"
+                height="30px"
+                class="btn-content"
+              >
+                <template v-slot:front>
+                  <div class="btn" @click="getCopy(r)">Copy</div>
+                </template>
+                <template v-slot:back>
+                  <div class="btn" @click="getCopy(r)">=)</div>
+                </template>
+              </vue-flip>
             </td>
           </tr>
         </table>
@@ -42,12 +66,14 @@
 </template>
 
 <script>
+import VueFlip from 'vue-flip'
 import Countdown from '@chenfengyuan/vue-countdown'
 
 export default {
   name: 'App',
   components: {
-    Countdown
+    Countdown,
+    VueFlip
   },
   data() {
     return {
@@ -114,9 +140,14 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin: 60px auto;
+  margin: 20px auto;
   width: 350px;
 }
+ul {
+  margin: 0;
+  padding: 0;
+}
+
 li {
   list-style: none;
   line-height: 30px;
@@ -128,12 +159,15 @@ li {
 
 textarea {
   width: 100%;
-  margin: 0 auto;
+  margin: 10px auto;
+  border: 2px solid #673bb7;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 table {
   margin: 0 auto;
-  width: 300px;
+  width: 100%;
 }
 
 td {
@@ -141,7 +175,7 @@ td {
 }
 
 td:nth-child(2) {
-  width: 50px;
+  width: 70px;
 }
 
 hr {
@@ -154,5 +188,89 @@ button {
   font-size: 18px;
   padding: 5px;
   margin: 0 5px;
+}
+
+.back {
+  background-color: #ffc107;
+}
+.front {
+  background-color: #673ab7;
+}
+.back,
+.front {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  width: 100%;
+  height: 100%;
+}
+.back {
+  transform: rotateY(180deg);
+}
+.back,
+.front {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.back,
+.flipper,
+.front {
+  transform-style: preserve-3d;
+}
+.btn-content {
+  margin: 0 auto;
+}
+.btn-container {
+  margin: 0 auto 15px auto;
+}
+.btn {
+  display: flex;
+  height: 50px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes slide {
+  0%,
+  30% {
+    transform: translateY(0);
+  }
+  33%,
+  60% {
+    transform: translateY(-100px);
+  }
+  66%,
+  93% {
+    transform: translateY(-200px);
+  }
+}
+#slide-externo {
+  width: 100%;
+  height: 70px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+#slide-interno {
+  width: 100%;
+  animation: slide 10s infinite;
+}
+#slide-interno h3 {
+  display: block;
+  height: 70px;
+  width: 100%;
+  color: #673bb7;
+  font-size: 28px;
+}
+.text-tempo {
+  background-color: #673bb7;
+  color: #fff;
+  font-size: 14px;
+  padding: 4px;
 }
 </style>
