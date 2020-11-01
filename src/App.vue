@@ -9,17 +9,23 @@
     </div>
     <textarea v-model="text" cols="30" rows="5" />
     <br />
-    <vue-flip active-click width="200px" height="50px" class="btn-container">
-      <template v-slot:front>
-        <div class="btn" @click="getList">Converter</div>
-      </template>
-      <template v-slot:back>
-        <div class="btn" @click="getEmpty">Limpar</div>
-      </template>
-    </vue-flip>
+    <div style="display: flex">
+      <vue-flip active-click width="200px" height="50px" class="btn-container">
+        <template v-slot:front>
+          <div class="btn" @click="getList">Converter</div>
+        </template>
+        <template v-slot:back>
+          <div class="btn" @click="getEmpty">Limpar</div>
+        </template>
+      </vue-flip>
+      <div class="flipper btn-container" v-if="result.length">
+        <a class="btn btn-down" href="#" @click.prevent="createAndOpenFile"
+          >Download GPX</a
+        >
+      </div>
+    </div>
     <!--  <button @click.prevent="getList">Converter</button>
     <button @click.prevent="getEmpty">Limpar</button> -->
-    <h4 v-if="result.lenght">Result</h4>
     <ul>
       <li v-for="(r, k) in result" :key="k">
         <table>
@@ -114,10 +120,30 @@ export default {
       this.text = ''
       this.result = []
     },
+    createAndOpenFile() {
+      let stupidExample = `<?xml version="1.0" encoding="UTF-8"?>
+            <gpx version="1.1" creator="Só Coordenadas | Solo coordenadas | Only Coordinate | https://heberalmeida.github.io/list/">
+              ${this.result
+                .map(i => {
+                  let coord = i.coord.trim().split(',')
+                  return `<wpt lat="${coord[0]}" lon="${coord[1]}"></wpt>`
+                })
+                .join('')}</gpx>`
+      var a = window.document.createElement('a')
+      a.href = window.URL.createObjectURL(
+        new Blob([stupidExample], { type: 'text/xml' })
+      )
+      a.download = `gpx${Math.floor(Date.now() / 1000)}.xml`
+
+      document.body.appendChild(a)
+      a.click()
+
+      document.body.removeChild(a)
+    },
     async getList() {
       if (this.text) {
         const results = await this.text.matchAll(
-          /(-?\d+.\d+,-?\d+.\d{6})(:blank:)?(.+?(\d+\w+)?(\d+)(\w+))?/g
+          /(-?\d+.\d+, ?-?\d+.\d{6})(:blank:)?(.+?(\d+\w+)?(\d+)(\w+))?/g
         )
         this.result = Array.from(results).map(i => {
           return {
@@ -272,5 +298,19 @@ button {
   color: #fff;
   font-size: 14px;
   padding: 4px;
+}
+
+.btn-down {
+  background: #673bb7;
+  color: #fff;
+  text-decoration: none;
+  width: 200px;
+  height: 50px;
+  flex: 1;
+  margin-left: 4px;
+}
+
+.btn-container {
+  flex: 1;
 }
 </style>
