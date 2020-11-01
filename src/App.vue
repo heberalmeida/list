@@ -133,7 +133,7 @@ export default {
       a.href = window.URL.createObjectURL(
         new Blob([stupidExample], { type: 'text/xml' })
       )
-      a.download = `gpx${Math.floor(Date.now() / 1000)}.xml`
+      a.download = `gpx${Math.floor(Date.now() / 1000)}.gpx`
 
       document.body.appendChild(a)
       a.click()
