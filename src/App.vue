@@ -131,7 +131,7 @@ export default {
                 .join('')}</gpx>`
       var a = window.document.createElement('a')
       a.href = window.URL.createObjectURL(
-        new Blob([stupidExample], { type: 'text/gpx' })
+        new Blob([stupidExample], { type: 'text/json' })
       )
       a.download = `gpx${Math.floor(Date.now() / 1000)}.gpx`
 
